@@ -1,0 +1,82 @@
+{% extends 'layouts/base.html' %} {% load static %} {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="my-0">&nbsp;</div>
+            <div class="card mb-4">
+                <img class="card-img-top" src="{{ object.image.url }}" alt="{{ object.modelo }}">
+                <div class="card-body">
+                    <h2 class="card-title">{{ object.modelo }}</h2>
+                    <p class="card-text">
+                        {{ object.descripcion }}
+                    </p>
+                    <h5 style="color:#E57373; text-decoration: line-through">Precio del alquiler por día: S/125.00</h5>
+                    <h4>Precio de lanzamiento: S/{{ object.precio}}</h4>
+                </div>
+                <div class="card-footer text-muted">
+                    Fecha de lanzamiento: {{ object.ano }} |
+                    <a>
+                            {{ object.marca }} - {{ object.modelo }}
+                        </a>
+                </div>
+
+                <div class="card-footer text-center">
+                    <h6 class="card-header text-left">Indica las fechas</h6>
+                    <form action="{% url 'autos:autos_detail' auto.slug %}" method="POST">
+                        <div class="form-group d-flex mb-0" style="white-space: pre-wrap;">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ object.id }}">
+                            <div class="ml-4">
+                                Fecha de inicio: <input type="date" id="date_start" name="date_start" value="" min="2020-11-14" max="2020-12-31">
+                            </div>
+                            <div class="mr-4">
+                                Fecha de Fin: <input type="date" id="date_end" name="date_end" value="" min="2020-11-14" max="2020-12-31">
+                            </div>
+                            <br>
+                        </div>
+                        <label class="mb-4">Dejanos un comentario</label>
+                        <textarea class="form-control" rows="3" name="comment"></textarea>
+                        <hr class="">
+                        <button type="submit" class="btn btn-primary w-75">Enviar</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <hr>
+
+            <!-- {% if user.is_authenticated %}
+            <div class="card my-4">
+                <h5 class="card-header">Deja tu comentario</h5>
+                <div class="card-body">
+                    <form action="{% url 'index' %}" method="POST">
+                        <div class="form-group">
+                            {% csrf_token %}
+                            <textarea class="form-control" rows="3" name="comment"></textarea>
+                            <input type="hidden" name="id" value="{{ object.id }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}  -->
+
+            {% for comment in comments %}
+            <div class="media mb-4">
+                <img class="d-flex mr-3 rounded-circle" src="http://via.placeholder.com/50">
+                <div class="media-body">
+                    <h5 class="mt-0">{{ comment.user.username }}</h5>
+                    <p>{{ comment.content }}</p>
+                    <p class="text-right mr-4 font-italic h6">{{comment.date}}</p>
+                    <hr>
+                </div>
+            </div>
+            {% empty %}
+            <div class="media mb-4">
+                <h5>No hay comentarios !</h5>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
